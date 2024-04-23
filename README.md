@@ -29,9 +29,17 @@
   8. If we store our `shard` in multiple nodes and lost one node. Data in that node will be gone forever so we should have a replica `shard`. So we have `Primary Shards` and `Replica Shard` that automatically scale our cluster horizontally by adding more nodes as out data grows
 
   ### Setup ElasticSearch and Kibana.
-  1. Download [ElasticSearch](https://www.elastic.co/downloads/elasticsearch).
-  2. Download [Kibana](https://www.elastic.co/downloads/kibana). 
-  3. Extrac the `ElasticSearch` zip file and run `bin/elasticsearch` or `bin\elasticsearch.bat` on Windows.
-  4. Extrac the `Kibana` zip file and run the `kibana.bat` file.
-  3. Run `curl hhtp://localhost:9200/` or `Invoke-RestMethod http://localhost:9200` with Powershell. If it returns JSON file with our cluster information, everything is working correctly.
-  4. 
+    #### Setup ElasticSearch
+      1. Download [ElasticSearch](https://www.elastic.co/downloads/elasticsearch).
+      3. Extrac the `ElasticSearch` zip file and run `bin/elasticsearch` or `bin\elasticsearch.bat` on Windows.
+      4. On Windows, we can run the `elasticsearch-service.bat` file to make it run in the background without having our terminal open. After running the command, we can start `elasticsearch` using terminal with `elasticsearch-service start` and we can now close the terminal if we want. `ElasticSearch` is running
+      5. I get `ERROR: Failed to determine the health of the cluster. , with exit code 69` when running `elasticsearch.bat` file directly in the `bin` folder so make sure to cd out of the `bin` folder and run `bin/elasticsearch-reset-password -u elastic`
+      6. If encounter `received plaintext http traffic on an https channel, closing connection Netty4HttpChannel` error. We can set `xpack` security enable to `false` in config file.
+      7. Open browser, go to `http://localhost:9200` or run `curl hhtp://localhost:9200/` or `Invoke-RestMethod http://localhost:9200` with Powershell. If it returns JSON file with our cluster information, everything is working correctly.
+      5. Extrac the `Kibana` zip file and run the `kibana.bat` file.
+
+    #### Setup Kibana
+      1. Download and extract [Kibana](https://www.elastic.co/downloads/kibana). 
+      2. Learn your lesson. Do not cd to the `bin` folder. Just go to Kibana folder and run `bin\kibana.bat`. It will take a while to run. When it finishes we can connect to Kibana from its port `5601`
+
+    
