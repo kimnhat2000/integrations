@@ -13,6 +13,7 @@
     - ***Work flow:*** 
       - *From user perspective*: When a user send a search request to a server, the server will send the query to ElasticSearch, ElasticSearch does it job to get the most relevant returns and send it back to the server and server will send it to the user.
       `Users' queries => Server => ElasticSearch => Server => User.`
+
       - *From app perspective*: When an app send a query to server, the server reaches out to ElasticSearch and ElasticSearch delivers required info back to server and the app. However, an application usually gets huge influx of data from ElasticSearch and to help visualize things easier, we can use`Kibana`. With `Kibana`, we can make data looks easy to understand. It has different visual tools for every kind of data. 
 
   ### ElasticSearch architechture.
@@ -30,7 +31,7 @@
   ### Setup ElasticSearch and Kibana.
   1. Download [ElasticSearch](https://www.elastic.co/downloads/elasticsearch).
   2. Download [Kibana](https://www.elastic.co/downloads/kibana). 
-  3. Extrac the ElasticSearch zip file and run `bin/elasticsearch` or `bin\elasticsearch.bat` on Windows.
-  4. Extrac 
-  3. Run `curl hhtp://localhost:9200/` or `Invoke-RestMethod http://localhost:9200` with Powershell.
+  3. Extrac the `ElasticSearch` zip file and run `bin/elasticsearch` or `bin\elasticsearch.bat` on Windows.
+  4. Extrac the `Kibana` zip file and run the `kibana.bat` file.
+  3. Run `curl hhtp://localhost:9200/` or `Invoke-RestMethod http://localhost:9200` with Powershell. If it returns JSON file with our cluster information, everything is working correctly.
   4. 
