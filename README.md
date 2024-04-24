@@ -34,12 +34,49 @@
       3. Extrac the `ElasticSearch` zip file and run `bin/elasticsearch` or `bin\elasticsearch.bat` on Windows.
       4. On Windows, we can run the `elasticsearch-service.bat` file to make it run in the background without having our terminal open. After running the command, we can start `elasticsearch` using terminal with `elasticsearch-service start` and we can now close the terminal if we want. `ElasticSearch` is running
       5. I get `ERROR: Failed to determine the health of the cluster. , with exit code 69` when running `elasticsearch.bat` file directly in the `bin` folder so make sure to cd out of the `bin` folder and run `bin/elasticsearch-reset-password -u elastic`
-      6. If encounter `received plaintext http traffic on an https channel, closing connection Netty4HttpChannel` error. We can set `xpack` security enable to `false` in config file.
+      6. If encounter `received plaintext http traffic on an https channel, closing connection Netty4HttpChannel` error. We can set `xpack` security enable to `false` in config file or run this command when starting `ElasticSearch`
+      > bin/elasticsearch -E xpack.security.enabled=false
       7. Open browser, go to `http://localhost:9200` or run `curl hhtp://localhost:9200/` or `Invoke-RestMethod http://localhost:9200` with Powershell. If it returns JSON file with our cluster information, everything is working correctly.
-      5. Extrac the `Kibana` zip file and run the `kibana.bat` file.
+      8. So far, so good. The problem with this is when searching for Integrations after installing Elastic Agent, we will encounter this error `Kibana cannot connect to the Elastic Package Registry, which provides Elastic Agent integrations`. To fix it we will need to try these steps.
+      9. configure x-pack to true in elasticsearc.yml, restart both elasticsearch and kibana
+      10. You will need the following commands on terminal.
+      
+      ```
+      bin\elasticsearch-create-enrollment-token --scope kibana
+      bin\kibana-verification-code // ***do not clear the terminal before copying the code. We will need it for Kibana***
+      bin\elasticsearch-reset-password -u elastic -i
+      ```
+
+      After this, we can access our cluster on a browser by going to `https://localhost:9200` instead of http and enter username and password.
 
     #### Setup Kibana
       1. Download and extract [Kibana](https://www.elastic.co/downloads/kibana). 
-      2. Learn your lesson. Do not cd to the `bin` folder. Just go to Kibana folder and run `bin\kibana.bat`. It will take a while to run. When it finishes we can connect to Kibana from its port `5601`
+      2. Learn your lesson. Do not cd to the `bin` folder. Just go to Kibana folder and run `bin\kibana.bat`. It will take a while to run ... maybe 15 minutes or more... no kidding. When it finishes we can connect to Kibana from its port `5601`
 
-    
+  ### first steps.
+    With ElasticSearch and Kibana setup, we can now start working on our cluster.
+    1. Firstly, we can start with the config file. That file will have default value we can change.
+      - Change cluster name: Uncommend the `#cluster.name: my-application` line and edit `my-application`.
+      - Change node name: Uncommend `#node.name: node-1` line and edit `node-1`.
+      - To apply changes, we need to stop and restart `ElasticSearch` and `kibana`. Unfortunately.
+
+    2. We can test our cluster from kibana by going to our local port 5601, select hamburger icon at top left, `Dev tools`, make `GET _cluster/health` request to get our cluster status.
+    3. Get info about nodes in a cluster: 
+    > GET _nodes/stats
+    4. ***WE KNOW THAT ELASTIC USES INDEX FOR OUR DATA SO WE CAN START OUR FIRST STEPS WITH CREATING A NEW INDEX***
+      - > PUT Name-of-the-Index
+      - More details on working with `indexes` we can go [here](https://github.com/LisaHJung/Part-1-Intro-to-Elasticsearch-and-Kibana?tab=readme-ov-file#c---create)
+
+## Elastic Agent.
+  1. Elastic Agent helps running ELK.
+  2. Download Elastic agent [here](https://www.elastic.co/downloads/elastic-agent).
+  3. Unzip, open and edit the elastic-agent.yml file to our ElasticSearch.
+  4. Run `elastic-agent.exe install`.
+  5. Check if agent is running by go to Kibana => Stack Management => Index management => Data Stream. If we have data on the list, then our agent is running.
+  
+## Integrate with 1Password.
+  1. To integrate with 1Password. We need to setup agent. If we currently have a running agent, we can restart it by uninstalling and reinstalling it.
+  ```
+   C:\"Program Files"\Elastic\Agent\elastic-agent.exe uninstall
+   elastic-agent.exe install
+  ```
